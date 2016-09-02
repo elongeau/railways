@@ -13,5 +13,9 @@ class RailWaysSpec extends WordSpec with MustMatchers {
     "transform a function in two track input with a success" in {
       twoTrack(Success("FooBar")) mustBe Success("FooBar")
     }
+
+    "Handle failure" in {
+      twoTrack(Failure("fail")) mustBe Failure("fail")
+    }
   }
 }
