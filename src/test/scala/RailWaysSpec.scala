@@ -25,10 +25,10 @@ class RailWaysSpec extends WordSpec with MustMatchers {
   }
 
   ">>" should {
-    "chain two track function" in {
-      def isABar(s: String): Result[String] = if (s endsWith "Bar") Success(s) else Failure("not a bar")
-      def isFooBar = isAFoo _ >> bind(isABar)
+    def isABar(s: String): Result[String] = if (s endsWith "Bar") Success(s) else Failure("not a bar")
+    def isFooBar = isAFoo _ >> bind(isABar)
 
+    "chain two track function" in {
       isFooBar("FooBar") mustBe Success("FooBar")
     }
   }
