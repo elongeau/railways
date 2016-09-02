@@ -17,5 +17,9 @@ class RailWaysSpec extends WordSpec with MustMatchers {
     "Handle failure" in {
       twoTrack(Failure("fail")) mustBe Failure("fail")
     }
+
+    "still call the bound method" in {
+      twoTrack(Success("Bar")) mustBe Failure("not a foo")
+    }
   }
 }
