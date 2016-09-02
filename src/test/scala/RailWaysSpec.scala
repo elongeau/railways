@@ -36,5 +36,9 @@ class RailWaysSpec extends WordSpec with MustMatchers {
       isFooBar("FooBaz") mustBe Failure("not a bar")
     }
 
+    "chain two track function with a failure input on first function" in {
+      isFooBar("ZooBar") mustBe Failure("not a foo")
+    }
+
   }
 }
