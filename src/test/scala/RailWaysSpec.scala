@@ -42,4 +42,20 @@ class RailWaysSpec extends WordSpec with MustMatchers {
     }
 
   }
+
+  ">>=" should {
+
+    def isFooBar = isAFoo _ >>= isABar
+    "chain one track functions" in {
+      isFooBar("FooBar") mustBe Success("FooBar")
+    }
+
+    "chain one track functions with a failure input" in {
+      isFooBar("FooBaz") mustBe Failure("not a bar")
+    }
+
+    "chain one track functions with a failure input on first function" in {
+      isFooBar("ZooBar") mustBe Failure("not a foo")
+    }
+  }
 }
