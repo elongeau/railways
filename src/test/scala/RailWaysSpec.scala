@@ -58,4 +58,17 @@ class RailWaysSpec extends WordSpec with MustMatchers {
       isFooBar("ZooBar") mustBe Failure("not a foo")
     }
   }
+
+  ">=>" should {
+    def upper(s: String) = s.toUpperCase
+    def upperFoo = isAFoo _ >=> upper
+
+    "chain a one track function to a two track one" in {
+      upperFoo("FooBar") mustBe Success("FOOBAR")
+    }
+
+    "chain a one track function to a two track one with a failure input" in {
+      upperFoo("nope") mustBe Failure("not a foo")
+    }
+  }
 }
