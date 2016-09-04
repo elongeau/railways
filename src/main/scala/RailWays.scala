@@ -1,15 +1,16 @@
 /**
   * @author elongeau
   */
-object RailWays {
+object RailWays{
 
   sealed trait Result[A]
 
-  case class Success[A](a: A) extends Result[A]
-
-  case class Failure[A](s: String) extends Result[A]
-
   object Result {
+
+    case class Success[A](a: A) extends Result[A]
+
+    case class Failure[A](s: String) extends Result[A]
+
     def bind[A, B](f: A => Result[B]): Result[A] => Result[B] = {
       case Success(a) => f(a)
       case Failure(s) => Failure(s)

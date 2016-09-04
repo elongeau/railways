@@ -1,5 +1,5 @@
+import RailWays.Result
 import RailWays.Result._
-import RailWays._
 import org.scalatest.{MustMatchers, WordSpec}
 
 /**
