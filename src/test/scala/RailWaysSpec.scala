@@ -1,11 +1,12 @@
 import RailWays.Result
 import RailWays.Result._
+import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
 import org.scalatest.{MustMatchers, WordSpec}
 
 /**
   * @author elongeau
   */
-class RailWaysSpec extends WordSpec with MustMatchers {
+class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks {
   def isAFoo(s: String): Result[String] = if (s startsWith "Foo") Success(s) else Failure("not a foo")
 
   def isABar(s: String): Result[String] = if (s endsWith "Bar") Success(s) else Failure("not a bar")
@@ -80,11 +81,18 @@ class RailWaysSpec extends WordSpec with MustMatchers {
     "parallelize function" in {
       val twoTrackUpper = switch(upper _)
       val parallel = (isAFoo _)./:/(isABar _)(addSuccess, addFailure)
+      val data: TableFor2[String, Result[String]] = Table(
+        ("Input", "Expected"),
+        ("FooBar", Success("FooBar")),
+        ("FozBar", Failure("not a foo")),
+        ("FooBaZ", Failure("not a bar")),
+        ("FoZBaZ", Failure("not a foo ; not a bar"))
+      )
 
-      parallel("FooBar") mustBe Success("FooBar")
-      parallel("FozBar") mustBe Failure("not a foo")
-      parallel("FooBaz") mustBe Failure("not a bar")
-      parallel("FozBaz") mustBe Failure("not a foo ; not a bar")
+      forAll(data) { (input: String, expected: Result[String]) =>
+        parallel(input) mustBe expected
+
+      }
     }
   }
 }
