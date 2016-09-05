@@ -72,4 +72,11 @@ class RailWaysSpec extends WordSpec with MustMatchers {
       upperFoo("nope") mustBe Failure("not a foo")
     }
   }
+
+  "/=/" should {
+    "parallelize function" in {
+       val twoTrackUpper = switch(upper _)
+       val parallel = isABar _ /=/ isAFoo /=/ twoTrackUpper
+    }
+  }
 }
