@@ -74,9 +74,17 @@ class RailWaysSpec extends WordSpec with MustMatchers {
   }
 
   "/=/" should {
+    def addSuccess(s1: String, s2: String) = s1
+    def addFailure(s1: String, s2: String) = s"$s1 ; $s2"
+
     "parallelize function" in {
-       val twoTrackUpper = switch(upper _)
-       val parallel = isABar _ /=/ isAFoo /=/ twoTrackUpper
+      val twoTrackUpper = switch(upper _)
+      val parallel = (isAFoo _)./:/(isABar _)(addSuccess, addFailure)
+
+      parallel("FooBar") mustBe Success("FooBar")
+      parallel("FozBar") mustBe Failure("not a foo")
+      parallel("FooBaz") mustBe Failure("not a bar")
+      parallel("FozBaz") mustBe Failure("not a foo ; not a bar")
     }
   }
 }

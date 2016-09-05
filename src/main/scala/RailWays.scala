@@ -1,7 +1,7 @@
 /**
   * @author elongeau
   */
-object RailWays{
+object RailWays {
 
   sealed trait Result[A]
 
@@ -24,6 +24,18 @@ object RailWays{
       def >>=(g: B => Result[C]) = f andThen bind(g)
 
       def >=>(g: B => C): A => Result[C] = f andThen bind(switch(g))
+
+      type AddSuccess = (B, B) => B
+      type AddFailure = (String, String) => String
+
+      def /:/(g: A => Result[B])(addSuccess: AddSuccess, addFailure: AddFailure): A => Result[B] = (a: A) => {
+        (f(a), g(a)) match {
+          case (Success(b1), Success(b2)) => Success(addSuccess(b1, b2))
+          case (Failure(s), Success(_)) => Failure(s)
+          case (Success(_), Failure(s)) => Failure(s)
+          case (Failure(f1), Failure(f2)) => Failure(addFailure(f1, f2))
+        }
+      }
     }
 
   }
