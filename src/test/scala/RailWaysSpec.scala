@@ -10,6 +10,8 @@ class RailWaysSpec extends WordSpec with MustMatchers {
 
   def isABar(s: String): Result[String] = if (s endsWith "Bar") Success(s) else Failure("not a bar")
 
+  def upper(s: String) = s.toUpperCase
+
   "bind" should {
     def twoTrack = bind(isAFoo)
 
@@ -60,7 +62,6 @@ class RailWaysSpec extends WordSpec with MustMatchers {
   }
 
   ">=>" should {
-    def upper(s: String) = s.toUpperCase
     def upperFoo = isAFoo _ >=> upper
 
     "chain a one track function to a two track one" in {
