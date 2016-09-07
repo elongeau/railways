@@ -13,6 +13,8 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
 
   def upper(s: String) = s.toUpperCase
 
+  def lower(s: String) = s.toLowerCase
+
   "bind" should {
     def twoTrack = bind(isAFoo)
 
