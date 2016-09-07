@@ -79,7 +79,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   "/=/" should {
 
     "parallelize function" in {
-      val parallel = (isAFoo _)./:/(isABar _)
+      val parallel = isAFoo _ /:/ isABar
       val data: TableFor2[String, Result[String]] = Table(
         ("Input", "Expected"),
         ("FooBar", Success("FooBar")),
