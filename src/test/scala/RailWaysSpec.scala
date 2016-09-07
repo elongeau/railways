@@ -77,12 +77,9 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   }
 
   "/=/" should {
-    def addSuccess(s1: String, s2: String) = s1
-    def addFailure(s1: String, s2: String) = s"$s1 ; $s2"
 
     "parallelize function" in {
-      val twoTrackUpper = switch(upper _)
-      val parallel = (isAFoo _)./:/(isABar _)(addSuccess, addFailure)
+      val parallel = (isAFoo _)./:/(isABar _)
       val data: TableFor2[String, Result[String]] = Table(
         ("Input", "Expected"),
         ("FooBar", Success("FooBar")),

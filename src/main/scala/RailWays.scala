@@ -28,12 +28,12 @@ object RailWays {
       type AddSuccess = (B, B) => B
       type AddFailure = (String, String) => String
 
-      def /:/(g: A => Result[B])(addSuccess: AddSuccess, addFailure: AddFailure): A => Result[B] = (a: A) => {
+      def /:/(g: (A) => Result[B]): A => Result[B] = (a: A) => {
         (f(a), g(a)) match {
-          case (Success(b1), Success(b2)) => Success(addSuccess(b1, b2))
+          case (Success(b1), Success(_)) => Success(b1)
           case (Failure(s), Success(_)) => Failure(s)
           case (Success(_), Failure(s)) => Failure(s)
-          case (Failure(f1), Failure(f2)) => Failure(addFailure(f1, f2))
+          case (Failure(f1), Failure(f2)) => Failure(s"$f1 ; $f2")
         }
       }
     }
