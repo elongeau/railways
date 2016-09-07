@@ -76,7 +76,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     }
   }
 
-  "/=/" should {
+  "/:/" should {
 
     "parallelize function" in {
       val parallel = isAFoo _ /:/ isABar
