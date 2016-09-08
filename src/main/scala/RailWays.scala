@@ -9,7 +9,11 @@ object RailWays {
 
     case class Success[A](a: A) extends Result[A]
 
-    case class Failure[A](s: String) extends Result[A]
+    case class Failure[A](causes: List[String]) extends Result[A]
+
+    object Failure {
+      def apply[A](causes: String*): Failure[A] = new Failure[A](causes.toList)
+    }
 
     def bind[A, B](f: A => Result[B]): Result[A] => Result[B] = {
       case Success(a) => f(a)
