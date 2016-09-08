@@ -28,7 +28,7 @@ object RailWays {
       type AddSuccess = (B, B) => B
       type AddFailure = (String, String) => String
 
-      def /:/(g: (A) => Result[B]): A => Result[B] = (a: A) => {
+      def &&&(g: (A) => Result[B]): A => Result[B] = (a: A) => {
         (f(a), g(a)) match {
           case (Success(b1), Success(_)) => Success(b1)
           case (Failure(s), Success(_)) => Failure(s)

@@ -76,10 +76,10 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     }
   }
 
-  "/:/" should {
+  "&&&" should {
 
     "parallelize function" in {
-      val parallel = isAFoo _ /:/ isABar
+      val parallel = isAFoo _ &&& isABar
       val data: TableFor2[String, Result[String]] = Table(
         ("Input", "Expected"),
         ("FooBar", Success("FooBar")),
@@ -96,7 +96,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
 
     "always return the first success" when {
       "the 2 functions change the input" in {
-        val parallel = switch(upper _) /:/ switch(lower _)
+        val parallel = switch(upper _) &&& switch(lower _)
           parallel("foo") mustBe Success("FOO")
 
       }
