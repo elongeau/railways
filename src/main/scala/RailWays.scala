@@ -22,15 +22,12 @@ object RailWays {
 
     def switch[A, B](f: A => B) = (a: A) => Success(f(a))
 
-    implicit class Ops[A, B, C](f: A => Result[B]) {
-      def >>(g: Result[B] => Result[C]) = f andThen g
+    implicit class Ops[A, B](f: A => Result[B]) {
+      def >>[C](g: Result[B] => Result[C]) = f andThen g
 
-      def >>=(g: B => Result[C]) = f andThen bind(g)
+      def >>=[C](g: B => Result[C]) = f andThen bind(g)
 
-      def >=>(g: B => C): A => Result[C] = f andThen bind(switch(g))
-
-      type AddSuccess = (B, B) => B
-      type AddFailure = (String, String) => String
+      def >=>[C](g: B => C): A => Result[C] = f andThen bind(switch(g))
 
       def &&&(g: (A) => Result[B]): A => Result[B] = (a: A) => {
         (f(a), g(a)) match {
