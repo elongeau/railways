@@ -37,7 +37,7 @@ object RailWays {
           case (Success(b1), Success(_)) => Success(b1)
           case (Failure(s), Success(_)) => Failure(s)
           case (Success(_), Failure(s)) => Failure(s)
-          case (Failure(f1), Failure(f2)) => Failure(s"$f1 ; $f2")
+          case (Failure(f1), Failure(f2)) => Failure(f1 ::: f2)
         }
       }
     }
