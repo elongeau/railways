@@ -87,7 +87,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
         ("FooBar", Success("FooBar")),
         ("FozBar", Failure("not a foo")),
         ("FooBaZ", Failure("not a bar")),
-        ("FoZBaZ", Failure("not a foo ; not a bar"))
+        ("FoZBaZ", Failure("not a foo","not a bar"))
       )
 
       forAll(data) { (input: String, expected: Result[String]) =>
