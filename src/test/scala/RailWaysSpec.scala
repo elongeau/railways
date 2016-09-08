@@ -99,7 +99,22 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     "always return the first success" when {
       "the 2 functions change the input" in {
         val parallel = switch(upper _) &&& switch(lower _)
+        parallel("foo") mustBe Success("FOO")
+      }
+    }
 
+    "accumulate failures" in {
+      val parallel = isAFoo _ &&& isABar &&& containsBaz
+      val data: TableFor2[String, Result[String]] = Table(
+        ("Input", "Expected"),
+        ("FooBar", Failure("without a baz")),
+        ("FozBar", Failure("not a foo ; without a baz")),
+        ("FooBaZ", Failure("not a bar ; without a baz")),
+        ("FoZBaZ", Failure("not a foo ; not a bar ; without a baz"))
+      )
+
+      forAll(data) { (input: String, expected: Result[String]) =>
+        parallel(input) mustBe expected
       }
     }
   }
