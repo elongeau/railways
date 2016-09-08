@@ -11,6 +11,8 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
 
   def isABar(s: String): Result[String] = if (s endsWith "Bar") Success(s) else Failure("not a bar")
 
+  def containsBaz(s: String): Result[String] = if (s contains "Baz") Success(s) else Failure("without a baz")
+
   def upper(s: String) = s.toUpperCase
 
   def lower(s: String) = s.toLowerCase
@@ -97,7 +99,6 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     "always return the first success" when {
       "the 2 functions change the input" in {
         val parallel = switch(upper _) &&& switch(lower _)
-          parallel("foo") mustBe Success("FOO")
 
       }
     }
