@@ -118,4 +118,11 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       }
     }
   }
+
+  "tee" should {
+    def log(s: String): Unit = println(s)
+    "wrap a function that return nothing" in {
+        val wrapped = tee(log _) >>= isAFoo
+    }
+  }
 }

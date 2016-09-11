@@ -22,6 +22,8 @@ object RailWays {
 
     def switch[A, B](f: A => B) = (a: A) => Success(f(a))
 
+    def tee[A](f: A => Unit): A => Result[A] = ???
+
     implicit class Ops[A, B](f: A => Result[B]) {
       def >>[C](g: Result[B] => Result[C]) = f andThen g
 
