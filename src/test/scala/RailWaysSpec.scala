@@ -120,9 +120,12 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   }
 
   "tee" should {
-    def log(s: String): Unit = println(s)
+    var console = List[String]()
+    def log(s: String) {console = s::console }
     "wrap a function that return nothing" in {
         val wrapped = tee(log _) >>= isAFoo
+        wrapped("Foo") mustBe Success("Foo")
+        console must contain("Foo")
     }
   }
 }
