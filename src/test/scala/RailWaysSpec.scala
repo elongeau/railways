@@ -1,12 +1,12 @@
 import RailWays.Result
 import RailWays.Result._
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.{BeforeAndAfter, MustMatchers, WordSpec}
 
 /**
   * @author elongeau
   */
-class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks {
+class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks with BeforeAndAfter {
   def isAFoo(s: String): Result[String] = if (s startsWith "Foo") Success(s) else Failure("not a foo")
 
   def isABar(s: String): Result[String] = if (s endsWith "Bar") Success(s) else Failure("not a bar")
@@ -16,6 +16,14 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   def upper(s: String) = s.toUpperCase
 
   def lower(s: String) = s.toLowerCase
+
+  var console = List[String]()
+
+  def formattedLog(template: String)(s: String): Unit = console = s"$template : $s" :: console
+
+  after {
+    console = List[String]()
+  }
 
   "bind" should {
     def twoTrack = bind(isAFoo)
@@ -117,5 +125,61 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
         parallel(input) mustBe expected
       }
     }
+  }
+
+  "tee" should {
+
+    def log(s: String) {
+      console = s :: console
+    }
+
+    "wrap a function that return nothing" in {
+      val wrapped = tee(log _) >>= isAFoo
+      wrapped("Foo") mustBe Success("Foo")
+      console must contain("Foo")
+    }
+
+    "wrap a function that fail" in {
+      def fail(s: String) = throw new Exception(s"fail with $s")
+      val wrapped = tee(fail _) >>= isAFoo
+      wrapped("Foo") mustBe Failure("fail with Foo")
+    }
+
+    "be chained with some other function" in {
+
+      val chain = tee(formattedLog("isAFoo ?")) >>=
+        isAFoo >>=
+        tee(formattedLog("isABar ?")) >>=
+        isABar >>=
+        tee(formattedLog("upper it")) >=>
+          upper
+
+      chain("FooBar") mustBe Success("FOOBAR")
+      console must contain("isAFoo ? : FooBar")
+      console must contain("isABar ? : FooBar")
+      console must contain("upper it : FooBar")
+    }
+  }
+
+  ">=>>" should {
+    val chain = isAFoo _ >=>> formattedLog("yes it's a foo") >=> upper
+
+    "chain a dead end function" in {
+      chain("Foo") mustBe Success("FOO")
+      console must contain("yes it's a foo : Foo")
+    }
+
+    "chain 2 dead end function" in {
+      val chain = isAFoo _ >=>> formattedLog("yes it's a foo") >=>> formattedLog("so much log") >=> upper
+      chain("Foo") mustBe Success("FOO")
+      console must contain("yes it's a foo : Foo")
+      console must contain("so much log : Foo")
+    }
+
+    "stop on first failure" in {
+      chain("Bar") mustBe Failure("not a foo")
+      console mustBe empty
+    }
+
   }
 }

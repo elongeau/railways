@@ -1,3 +1,5 @@
+import scala.util.Try
+
 /**
   * @author elongeau
   */
@@ -22,12 +24,20 @@ object RailWays {
 
     def switch[A, B](f: A => B) = (a: A) => Success(f(a))
 
+    def tee[A](f: A => Unit): A => Result[A] = (a: A) => {
+      Try(f(a)) match {
+        case scala.util.Success(_) => Success(a)
+        case scala.util.Failure(e) => Failure(e.getMessage)
+      }
+    }
+
     implicit class Ops[A, B](f: A => Result[B]) {
       def >>[C](g: Result[B] => Result[C]) = f andThen g
 
       def >>=[C](g: B => Result[C]) = f andThen bind(g)
 
       def >=>[C](g: B => C): A => Result[C] = f andThen bind(switch(g))
+      def >=>>(g: B => Unit): A => Result[B] = f andThen bind(tee(g))
 
       def &&&(g: (A) => Result[B]): A => Result[B] = (a: A) => {
         (f(a), g(a)) match {
