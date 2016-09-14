@@ -162,8 +162,9 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   }
 
   ">=>>" should {
+    val chain = isAFoo _ >=>> formattedLog("yes it's a foo") >=> upper
+
     "chain a dead end function" in {
-      val chain = isAFoo _ >=>> formattedLog("yes it's a foo") >=> upper
       chain("Foo") mustBe Success("FOO")
       console must contain("yes it's a foo : Foo")
     }
@@ -174,5 +175,11 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       console must contain("yes it's a foo : Foo")
       console must contain("so much log : Foo")
     }
+
+    "stop on first failure" in {
+      chain("Bar") mustBe Failure("not a foo")
+      console mustBe empty
+    }
+
   }
 }
