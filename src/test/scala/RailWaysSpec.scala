@@ -124,6 +124,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     def log(s: String) {
       console = s :: console
     }
+
     "wrap a function that return nothing" in {
       val wrapped = tee(log _) >>= isAFoo
       wrapped("Foo") mustBe Success("Foo")
@@ -134,6 +135,21 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       def fail(s: String) = throw new Exception(s"fail with $s")
       val wrapped = tee(fail _) >>= isAFoo
       wrapped("Foo") mustBe Failure("fail with Foo")
+    }
+
+    "be chained with some other function" in {
+      def formattedLog(template: String)(s: String): Unit = console = s"$template : $s" :: console
+      val chain = tee(formattedLog("isAFoo ?")) >>=
+        isAFoo >>=
+        tee(formattedLog("isABar ?")) >>=
+        isABar >>=
+        tee(formattedLog("upper it")) >=>
+          upper
+
+      chain("FooBar") mustBe Success("FOOBAR")
+      console must contain("isAFoo ? : FooBar")
+      console must contain("isABar ? : FooBar")
+      console must contain("upper it : FooBar")
     }
   }
 }
