@@ -37,6 +37,7 @@ object RailWays {
       def >>=[C](g: B => Result[C]) = f andThen bind(g)
 
       def >=>[C](g: B => C): A => Result[C] = f andThen bind(switch(g))
+      def >=>>(g: B => Unit): A => Result[B] = f andThen bind(tee(g))
 
       def &&&(g: (A) => Result[B]): A => Result[B] = (a: A) => {
         (f(a), g(a)) match {
