@@ -1,3 +1,5 @@
+import scala.util.Try
+
 /**
   * @author elongeau
   */
@@ -23,8 +25,10 @@ object RailWays {
     def switch[A, B](f: A => B) = (a: A) => Success(f(a))
 
     def tee[A](f: A => Unit): A => Result[A] = (a: A) => {
-      f(a)
-      Success(a)
+      Try(f(a)) match {
+        case scala.util.Success(_) => Success(a)
+        case scala.util.Failure(e) => Failure(e.getMessage)
+      }
     }
 
     implicit class Ops[A, B](f: A => Result[B]) {
