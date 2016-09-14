@@ -1,12 +1,12 @@
 import RailWays.Result
 import RailWays.Result._
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.{BeforeAndAfter, MustMatchers, WordSpec}
 
 /**
   * @author elongeau
   */
-class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks {
+class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks with BeforeAndAfter {
   def isAFoo(s: String): Result[String] = if (s startsWith "Foo") Success(s) else Failure("not a foo")
 
   def isABar(s: String): Result[String] = if (s endsWith "Bar") Success(s) else Failure("not a bar")
@@ -16,6 +16,12 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   def upper(s: String) = s.toUpperCase
 
   def lower(s: String) = s.toLowerCase
+  var console = List[String]()
+  def formattedLog(template: String)(s: String): Unit = console = s"$template : $s" :: console
+
+  after{
+    console = List[String]()
+  }
 
   "bind" should {
     def twoTrack = bind(isAFoo)
@@ -120,7 +126,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   }
 
   "tee" should {
-    var console = List[String]()
+
     def log(s: String) {
       console = s :: console
     }
@@ -138,7 +144,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     }
 
     "be chained with some other function" in {
-      def formattedLog(template: String)(s: String): Unit = console = s"$template : $s" :: console
+
       val chain = tee(formattedLog("isAFoo ?")) >>=
         isAFoo >>=
         tee(formattedLog("isABar ?")) >>=
