@@ -11,10 +11,14 @@ object RailWays {
 
     case class Success[A](a: A) extends Result[A]
 
-    case class Failure[A](causes: List[String]) extends Result[A]
+    case class Failure[A] private(causes: List[String]) extends Result[A] {
+      def ++(another: String): Failure[A] = Failure(causes ::: List(another))
+
+      override def toString = s"Failure(${causes.mkString(",")})"
+    }
 
     object Failure {
-      def apply[A](causes: String*): Failure[A] = new Failure[A](causes.toList)
+      def apply[A](cause: String): Failure[A] = new Failure[A](List(cause))
     }
 
     def bind[A, B](f: A => Result[B]): Result[A] => Result[B] = {
