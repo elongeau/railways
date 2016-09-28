@@ -14,7 +14,7 @@ object RailWays {
     case class Failure[A] private(causes: List[String]) extends Result[A]
 
     object Failure {
-      def apply[A](cause: String*): Failure[A] = new Failure[A](cause.toList)
+      def apply[A](cause: String): Failure[A] = new Failure[A](List(cause))
     }
 
     def bind[A, B](f: A => Result[B]): Result[A] => Result[B] = {
