@@ -13,6 +13,8 @@ object RailWays {
 
     case class Failure[A] private(causes: List[String]) extends Result[A] {
       def ++(another: String): Failure[A] = Failure(causes ::: List(another))
+
+      override def toString = s"Failure(${causes.mkString(",")})"
     }
 
     object Failure {
