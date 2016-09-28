@@ -190,5 +190,11 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
 
       fs mustBe Failure(List("foo","bar"))
     }
+
+    "hide inner list in toString" in {
+      val f = Failure("foo") ++ "bar" ++ "baz"
+
+      f.toString mustBe "Failure(foo,bar,baz)"
+    }
   }
 }
