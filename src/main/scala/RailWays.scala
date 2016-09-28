@@ -11,7 +11,9 @@ object RailWays {
 
     case class Success[A](a: A) extends Result[A]
 
-    case class Failure[A] private(causes: List[String]) extends Result[A]
+    case class Failure[A] private(causes: List[String]) extends Result[A] {
+      def ++(another: String) = ???
+    }
 
     object Failure {
       def apply[A](cause: String): Failure[A] = new Failure[A](List(cause))

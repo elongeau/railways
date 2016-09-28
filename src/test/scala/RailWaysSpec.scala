@@ -182,4 +182,13 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     }
 
   }
+
+  "a failure" should {
+    "be appended with another cause" in {
+      val f = Failure("foo")
+      val fs = f ++ "bar"
+
+      fs mustBe Failure(List("foo","bar"))
+    }
+  }
 }
