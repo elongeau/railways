@@ -95,7 +95,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
         ("FooBar", Success("FooBar")),
         ("FozBar", Failure("not a foo")),
         ("FooBaZ", Failure("not a bar")),
-        ("FoZBaZ", Failure("not a foo", "not a bar"))
+        ("FoZBaZ", Failure("not a foo") ++ "not a bar")
       )
 
       forAll(data) { (input: String, expected: Result[String]) =>
@@ -116,9 +116,9 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       val data: TableFor2[String, Result[String]] = Table(
         ("Input", "Expected"),
         ("FooBar", Failure("without a baz")),
-        ("FozBar", Failure("not a foo", "without a baz")),
-        ("FooBaZ", Failure("not a bar", "without a baz")),
-        ("FoZBaZ", Failure("not a foo", "not a bar", "without a baz"))
+        ("FozBar", Failure("not a foo") ++ "without a baz"),
+        ("FooBaZ", Failure("not a bar") ++ "without a baz"),
+        ("FoZBaZ", Failure("not a foo") ++ "not a bar" ++ "without a baz")
       )
 
       forAll(data) { (input: String, expected: Result[String]) =>
