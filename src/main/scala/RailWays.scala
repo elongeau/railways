@@ -5,7 +5,7 @@ import scala.util.Try
   */
 object RailWays {
 
-  sealed trait Result[A] {
+  sealed trait Result[+A] {
     final def map[B](f: A => B): Result[B] = flatMap(Result.switch(f))
 
     def flatMap[B](f: A => Result[B]): Result[B]
