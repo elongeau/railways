@@ -7,12 +7,15 @@ object RailWays {
 
   sealed trait Result[A] {
     def map[B](f: A => B): Result[B]
+    def flatMap[B](f: A => Result[B]): Result[B]
   }
 
   object Result {
 
     case class Success[A](a: A) extends Result[A] {
       override def map[B](f: (A) => B) = Success(f(a))
+
+      override def flatMap[B](f: (A) => Result[B]): Result[B] = ???
     }
 
     case class Failure[A] private(causes: List[String]) extends Result[A] {
@@ -21,6 +24,8 @@ object RailWays {
       override def toString = s"Failure(${causes.mkString(",")})"
 
       override def map[B](f: (A) => B) = Failure[B](causes)
+
+      override def flatMap[B](f: (A) => Result[B]): Result[B] = ???
     }
 
     object Failure {

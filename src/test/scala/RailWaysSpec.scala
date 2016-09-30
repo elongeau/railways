@@ -203,6 +203,13 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
 
         res mustBe Failure[String]("foo")
       }
+
+      "it is flatMapped" in {
+
+        val res = Failure[String]("foo") flatMap {s:String => Success(s.toUpperCase)}
+
+        res mustBe Failure[String]("foo")
+      }
     }
   }
 
@@ -210,6 +217,11 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     "be mapped over a function" in {
       val res: Result[String] = Success("foo") map (_.toUpperCase)
 
+      res mustBe Success("FOO")
+    }
+
+    "flatMap over a function" in {
+      val res: Result[String] = Success("foo") flatMap {s:String => Success(s.toUpperCase)}
       res mustBe Success("FOO")
     }
   }
