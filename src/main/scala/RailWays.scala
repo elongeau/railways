@@ -67,6 +67,10 @@ object RailWays {
       def success = Success(a)
     }
 
+    implicit class FailureOps(cause: String) {
+      def fail = Failure(cause)
+    }
+
   }
 
 }
