@@ -250,6 +250,10 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
         }
 
       }
+
+      "using failure method" in {
+        "foo".fail mustBe Failure("foo")
+      }
     }
   }
 }
