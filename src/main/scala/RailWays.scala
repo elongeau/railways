@@ -25,7 +25,7 @@ object RailWays {
 
       override def map[B](f: (A) => B) = Failure[B](causes)
 
-      override def flatMap[B](f: (A) => Result[B]): Result[B] = ???
+      override def flatMap[B](f: (A) => Result[B]): Result[B] = Failure[B](causes)
     }
 
     object Failure {
