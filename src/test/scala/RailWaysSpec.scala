@@ -233,4 +233,14 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     }
 
   }
+
+  "A result" should {
+    "be created implicity" when {
+      "using success method" in {
+        val res = "foo".success
+
+        res mustBe Success("foo")
+      }
+    }
+  }
 }
