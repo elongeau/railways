@@ -6,13 +6,13 @@ import scala.util.Try
 object RailWays {
 
   sealed trait Result[A] {
-    def map[B](f: A => B)
+    def map[B](f: A => B): Result[B]
   }
 
   object Result {
 
     case class Success[A](a: A) extends Result[A] {
-      override def map[B](f: (A) => B): Unit = ???
+      override def map[B](f: (A) => B) = ???
     }
 
     case class Failure[A] private(causes: List[String]) extends Result[A] {
@@ -20,7 +20,7 @@ object RailWays {
 
       override def toString = s"Failure(${causes.mkString(",")})"
 
-      override def map[B](f: (A) => B): Unit = ???
+      override def map[B](f: (A) => B) = ???
     }
 
     object Failure {
