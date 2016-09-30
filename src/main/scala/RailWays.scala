@@ -17,12 +17,12 @@ object RailWays {
       override def flatMap[B](f: (A) => Result[B]) = f(a)
     }
 
-    case class Failure[A] private(causes: List[String]) extends Result[A] {
-      def ++(another: String): Failure[A] = Failure(causes ::: List(another))
+    case class Failure private(causes: List[String]) extends Result[Nothing] {
+      def ++(another: String): Failure = Failure(causes ::: List(another))
 
       override def toString = s"Failure(${causes.mkString(",")})"
 
-      override def flatMap[B](f: (A) => Result[B]) = Failure[B](causes)
+      override def flatMap[B](f: _ => Result[B]) = Failure(causes)
     }
 
     object Failure {
