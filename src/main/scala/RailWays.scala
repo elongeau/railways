@@ -20,7 +20,7 @@ object RailWays {
 
       override def toString = s"Failure(${causes.mkString(",")})"
 
-      override def map[B](f: (A) => B) = ???
+      override def map[B](f: (A) => B) = Failure[B](causes)
     }
 
     object Failure {
