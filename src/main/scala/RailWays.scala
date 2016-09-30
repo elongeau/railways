@@ -7,6 +7,7 @@ object RailWays {
 
   sealed trait Result[A] {
     def map[B](f: A => B): Result[B]
+
     def flatMap[B](f: A => Result[B]): Result[B]
   }
 
@@ -52,6 +53,7 @@ object RailWays {
       def >>=[C](g: B => Result[C]) = f andThen bind(g)
 
       def >=>[C](g: B => C): A => Result[C] = f andThen bind(switch(g))
+
       def >=>>(g: B => Unit): A => Result[B] = f andThen bind(tee(g))
 
       def &&&(g: (A) => Result[B]): A => Result[B] = (a: A) => {
