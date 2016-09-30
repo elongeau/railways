@@ -5,7 +5,7 @@ import scala.util.Try
   */
 object RailWays {
 
-  sealed trait Result[A] {
+  sealed trait Result[+A] {
     final def map[B](f: A => B): Result[B] = flatMap(Result.switch(f))
 
     def flatMap[B](f: A => Result[B]): Result[B]
@@ -17,16 +17,16 @@ object RailWays {
       override def flatMap[B](f: (A) => Result[B]) = f(a)
     }
 
-    case class Failure[A] private(causes: List[String]) extends Result[A] {
-      def ++(another: String): Failure[A] = Failure(causes ::: List(another))
+    case class Failure private(causes: List[String]) extends Result[Nothing] {
+      def ++(another: String): Failure = Failure(causes ::: List(another))
 
       override def toString = s"Failure(${causes.mkString(",")})"
 
-      override def flatMap[B](f: (A) => Result[B]) = Failure[B](causes)
+      override def flatMap[B](f: Nothing => Result[B]) = Failure(causes)
     }
 
     object Failure {
-      def apply[A](cause: String): Failure[A] = new Failure[A](List(cause))
+      def apply(cause: String): Failure = new Failure(List(cause))
     }
 
     def bind[A, B](f: A => Result[B]): Result[A] => Result[B] = {
