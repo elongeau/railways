@@ -201,14 +201,14 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       "it is mapped" in {
         val res = Failure[String]("foo") map (_.toUpperCase)
 
-        res mustBe Failure("foo")
+        res mustBe Failure[String]("foo")
       }
     }
   }
 
   "a success" should {
     "be mapped over a function" in {
-      val res = Success("foo") map (_.toUpperCase)
+      val res: Result[String] = Success("foo") map (_.toUpperCase)
 
       res mustBe Success("FOO")
     }
