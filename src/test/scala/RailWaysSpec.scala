@@ -199,7 +199,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
 
     "not change" when {
       "it is mapped" in {
-        val res = Failure("foo") map (_.toUpperCase)
+        val res = Failure("foo") map { s: String => s.toUpperCase }
 
         res mustBe Failure("foo")
       }
