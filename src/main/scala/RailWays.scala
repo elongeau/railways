@@ -63,6 +63,14 @@ object RailWays {
       }
     }
 
+    implicit class SuccessOps[A](a: A) {
+      def success = Success(a)
+    }
+
+    implicit class FailureOps(cause: String) {
+      def fail = Failure(cause)
+    }
+
   }
 
 }
