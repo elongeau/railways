@@ -26,7 +26,7 @@ object RailWays {
     }
 
     object Failure {
-      def apply[A](cause: String): Failure[A] = new Failure[A](List(cause))
+      def apply(cause: String): Failure = new Failure(List(cause))
     }
 
     def bind[A, B](f: A => Result[B]): Result[A] => Result[B] = {
