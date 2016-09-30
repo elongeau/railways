@@ -15,7 +15,7 @@ object RailWays {
     case class Success[A](a: A) extends Result[A] {
       override def map[B](f: (A) => B) = Success(f(a))
 
-      override def flatMap[B](f: (A) => Result[B]): Result[B] = ???
+      override def flatMap[B](f: (A) => Result[B]): Result[B] = f(a)
     }
 
     case class Failure[A] private(causes: List[String]) extends Result[A] {
