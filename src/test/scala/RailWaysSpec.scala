@@ -237,9 +237,18 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   "A result" should {
     "be created implicity" when {
       "using success method" in {
-        val res = "foo".success
+        case class Person(name: String)
 
-        res mustBe Success("foo")
+        val data: TableFor2[Any, Result[Any]] = Table(
+          ("Input", "Expected"),
+          ("FooBar", Success("FooBar")),
+          (3, Success(3)),
+          (Person("John Doe"), Success(Person("John Doe")))
+        )
+        forAll(data) { (input: Any, expected: Result[Any]) =>
+          input.success mustBe expected
+        }
+
       }
     }
   }
