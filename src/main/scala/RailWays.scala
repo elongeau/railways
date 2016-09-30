@@ -1,3 +1,5 @@
+import RailWays.Result.{Failure, Success}
+
 import scala.util.Try
 
 /**
@@ -8,21 +10,20 @@ object RailWays {
   sealed trait Result[+A] {
     final def map[B](f: A => B): Result[B] = flatMap(Result.switch(f))
 
-    def flatMap[B](f: A => Result[B]): Result[B]
+    def flatMap[B](f: A => Result[B]): Result[B]     = this match {
+      case Success(a) => f(a)
+      case fail: Failure => fail
+    }
   }
 
   object Result {
 
-    case class Success[A](a: A) extends Result[A] {
-      override def flatMap[B](f: (A) => Result[B]) = f(a)
-    }
+    case class Success[A](a: A) extends Result[A]
 
     case class Failure private(causes: List[String]) extends Result[Nothing] {
       def ++(another: String): Failure = Failure(causes ::: List(another))
 
       override def toString = s"Failure(${causes.mkString(",")})"
-
-      override def flatMap[B](f: Nothing => Result[B]) = Failure(causes)
     }
 
     object Failure {
