@@ -6,7 +6,7 @@ import scala.util.Try
 object RailWays {
 
   sealed trait Result[A] {
-    def map[B](f: A => B): Result[B]
+    def map[B](f: A => B): Result[B] = flatMap(Result.switch(f))
 
     def flatMap[B](f: A => Result[B]): Result[B]
   }
@@ -14,8 +14,6 @@ object RailWays {
   object Result {
 
     case class Success[A](a: A) extends Result[A] {
-      override def map[B](f: (A) => B) = flatMap(switch(f))
-
       override def flatMap[B](f: (A) => Result[B]) = f(a)
     }
 
@@ -23,8 +21,6 @@ object RailWays {
       def ++(another: String): Failure[A] = Failure(causes ::: List(another))
 
       override def toString = s"Failure(${causes.mkString(",")})"
-
-      override def map[B](f: (A) => B) = flatMap(switch(f))
 
       override def flatMap[B](f: (A) => Result[B]) = Failure[B](causes)
     }
