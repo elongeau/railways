@@ -188,7 +188,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       val f = Failure("foo")
       val fs = f ++ "bar"
 
-      fs mustBe Failure(List("foo","bar"))
+      fs mustBe Failure(List("foo", "bar"))
     }
 
     "hide inner list in toString" in {
@@ -196,5 +196,41 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
 
       f.toString mustBe "Failure(foo,bar,baz)"
     }
+
+    "not change" when {
+      "it is mapped" in {
+        val res = Failure[String]("foo") map (_.toUpperCase)
+
+        res mustBe Failure[String]("foo")
+      }
+
+      "it is flatMapped" in {
+
+        val res = Failure[String]("foo") flatMap { s: String => Success(s.toUpperCase) }
+
+        res mustBe Failure[String]("foo")
+      }
+    }
+  }
+
+  "a success" should {
+    "be mapped over a function" in {
+      val res = Success("foo") map (_.toUpperCase)
+
+      res mustBe Success("FOO")
+    }
+
+    "flatMap" when {
+      "function return a success" in {
+        val res = Success("foo") flatMap { s: String => Success(s.toUpperCase) }
+        res mustBe Success("FOO")
+      }
+      "function return a failure" in {
+        val res = Success("foo") flatMap { s: String => Failure[String]("fail") }
+        res mustBe Failure("fail")
+
+      }
+    }
+
   }
 }
