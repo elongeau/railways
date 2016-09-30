@@ -14,7 +14,7 @@ object RailWays {
   object Result {
 
     case class Success[A](a: A) extends Result[A] {
-      override def map[B](f: (A) => B) = Success(f(a))
+      override def map[B](f: (A) => B) = flatMap(switch(f))
 
       override def flatMap[B](f: (A) => Result[B]) = f(a)
     }
@@ -24,7 +24,7 @@ object RailWays {
 
       override def toString = s"Failure(${causes.mkString(",")})"
 
-      override def map[B](f: (A) => B) = Failure[B](causes)
+      override def map[B](f: (A) => B) = flatMap(switch(f))
 
       override def flatMap[B](f: (A) => Result[B]) = Failure[B](causes)
     }
