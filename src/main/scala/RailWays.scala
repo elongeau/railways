@@ -5,7 +5,9 @@ import scala.util.Try
   */
 object RailWays {
 
-  sealed trait Result[A]
+  sealed trait Result[A] {
+    def map[B](f: A => B)
+  }
 
   object Result {
 
