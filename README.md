@@ -47,3 +47,7 @@ import RailWays.Result._
 
 val fail = "failed !".fail ++ "again" // fail: RailWays.Result.Failure = Failure(failed !,again)
 ```
+
+# Monad
+
+`Result` have `map` and `flatMap` that allow to use it in __for comprehension__. When a `Result` is a `Failure`, these methods have no effect and just return the original `Failure`.
