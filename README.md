@@ -38,3 +38,12 @@ val success = "foo".success
 val failure = "failed !".fail
 ```
 
+# Failure 
+
+A `Failure` can contains many causes but can only be created with one cause. But you can append another cause easily : 
+
+```scala
+import RailWays.Result._
+
+val fail = "failed !".fail ++ "again" // fail: RailWays.Result.Failure = Failure(failed !,again)
+```
