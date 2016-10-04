@@ -17,3 +17,24 @@ the `Result[A]` represent the result of a computation that can be a `Success[A]`
 | `>=>`    | `B => C`                  | `A => Result[C]` |                                                                      |
 | `>=>>`   | `B => Unit`               | `A => Result[B]` | allow to call a `Unit` function and pass the result of base function |
 | `&&&`    | `A => Result[B]`          | `A => Result[B]` | execute and concat the result of 2 functions                                                                     |
+
+# Create a `Result`
+
+## Use constructor
+
+```scala
+import RailWays.Result.{Failure, Success}
+
+val success = Success("Foo")
+val failure = Failure("failed !")
+```
+
+## Use implicit converter
+
+```scala
+import RailWays.Result.{Failure, Success}
+
+val success = "foo".success
+val failure = "failed !".fail
+```
+
