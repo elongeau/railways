@@ -73,4 +73,13 @@ object RailWays {
 
   }
 
+  /**
+    * @tparam A input type
+    * @tparam B intermediate type
+    * @tparam C return type
+    */
+  sealed trait Magnet[A, B, C] {
+    def apply(f: A => Result[B]): A => Result[C]
+  }
+
 }
