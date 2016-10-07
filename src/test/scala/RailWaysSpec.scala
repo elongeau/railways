@@ -41,9 +41,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     }
   }
 
-  ">>" should {
-    def isFooBar = isAFoo _ >> bind(isABar)
-
+  ">>=" should {
     "chain two track function" in {
       isFooBar("FooBar") mustBe Success("FooBar")
     }
@@ -56,11 +54,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       isFooBar("ZooBar") mustBe Failure("not a foo")
     }
 
-  }
-
-  ">>=" should {
-
-    def isFooBar = isAFoo _ >>= isABar
+    def isFooBar = isAFoo _ >>= isABar _
     "chain one track functions" in {
       isFooBar("FooBar") mustBe Success("FooBar")
     }
@@ -72,10 +66,8 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     "chain one track functions with a failure input on first function" in {
       isFooBar("ZooBar") mustBe Failure("not a foo")
     }
-  }
 
-  ">=>" should {
-    def upperFoo = isAFoo _ >=> upper
+    def upperFoo = isAFoo _ >>= upper _
 
     "chain a one track function to a two track one" in {
       upperFoo("FooBar") mustBe Success("FOOBAR")
@@ -83,6 +75,25 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
 
     "chain a one track function to a two track one with a failure input" in {
       upperFoo("nope") mustBe Failure("not a foo")
+    }
+
+    val chain = isAFoo _ >>= formattedLog("yes it's a foo") _ >>= upper _
+
+    "chain a dead end function" in {
+      chain("Foo") mustBe Success("FOO")
+      console must contain("yes it's a foo : Foo")
+    }
+
+    "chain 2 dead end function" in {
+      val chain = isAFoo _ >>= formattedLog("yes it's a foo") _ >>= formattedLog("so much log") _ >>= upper _
+      chain("Foo") mustBe Success("FOO")
+      console must contain("yes it's a foo : Foo")
+      console must contain("so much log : Foo")
+    }
+
+    "stop on first failure" in {
+      chain("Bar") mustBe Failure("not a foo")
+      console mustBe empty
     }
   }
 
@@ -134,53 +145,31 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     }
 
     "wrap a function that return nothing" in {
-      val wrapped = tee(log _) >>= isAFoo
+      val wrapped = tee(log _) >>= isAFoo _
       wrapped("Foo") mustBe Success("Foo")
       console must contain("Foo")
     }
 
     "wrap a function that fail" in {
       def fail(s: String) = throw new Exception(s"fail with $s")
-      val wrapped = tee(fail _) >>= isAFoo
+      val wrapped = tee(fail _) >>= isAFoo _
       wrapped("Foo") mustBe Failure("fail with Foo")
     }
 
     "be chained with some other function" in {
 
       val chain = tee(formattedLog("isAFoo ?")) >>=
-        isAFoo >>=
+        isAFoo _ >>=
         tee(formattedLog("isABar ?")) >>=
-        isABar >>=
-        tee(formattedLog("upper it")) >=>
-          upper
+        isABar _ >>=
+        tee(formattedLog("upper it")) >>=
+        upper _
 
       chain("FooBar") mustBe Success("FOOBAR")
       console must contain("isAFoo ? : FooBar")
       console must contain("isABar ? : FooBar")
       console must contain("upper it : FooBar")
     }
-  }
-
-  ">=>>" should {
-    val chain = isAFoo _ >=>> formattedLog("yes it's a foo") >=> upper
-
-    "chain a dead end function" in {
-      chain("Foo") mustBe Success("FOO")
-      console must contain("yes it's a foo : Foo")
-    }
-
-    "chain 2 dead end function" in {
-      val chain = isAFoo _ >=>> formattedLog("yes it's a foo") >=>> formattedLog("so much log") >=> upper
-      chain("Foo") mustBe Success("FOO")
-      console must contain("yes it's a foo : Foo")
-      console must contain("so much log : Foo")
-    }
-
-    "stop on first failure" in {
-      chain("Bar") mustBe Failure("not a foo")
-      console mustBe empty
-    }
-
   }
 
   "a failure" should {
@@ -235,7 +224,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   }
 
   "A result" should {
-    "be created implicity" when {
+    "be created implicitly" when {
       "using success method" in {
         case class Person(name: String)
 
