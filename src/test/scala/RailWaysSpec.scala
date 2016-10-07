@@ -25,21 +25,6 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     console = List[String]()
   }
 
-  "bind" should {
-    def twoTrack = bind(isAFoo)
-
-    "transform a function in two track input with a success" in {
-      twoTrack(Success("FooBar")) mustBe Success("FooBar")
-    }
-
-    "Handle failure" in {
-      twoTrack(Failure("fail")) mustBe Failure("fail")
-    }
-
-    "still call the bound method" in {
-      twoTrack(Success("Bar")) mustBe Failure("not a foo")
-    }
-  }
 
   ">>=" should {
     "chain two track function" in {
@@ -135,40 +120,6 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       forAll(data) { (input: String, expected: Result[String]) =>
         parallel(input) mustBe expected
       }
-    }
-  }
-
-  "tee" should {
-
-    def log(s: String) {
-      console = s :: console
-    }
-
-    "wrap a function that return nothing" in {
-      val wrapped = tee(log _) >>= isAFoo _
-      wrapped("Foo") mustBe Success("Foo")
-      console must contain("Foo")
-    }
-
-    "wrap a function that fail" in {
-      def fail(s: String) = throw new Exception(s"fail with $s")
-      val wrapped = tee(fail _) >>= isAFoo _
-      wrapped("Foo") mustBe Failure("fail with Foo")
-    }
-
-    "be chained with some other function" in {
-
-      val chain = tee(formattedLog("isAFoo ?")) >>=
-        isAFoo _ >>=
-        tee(formattedLog("isABar ?")) >>=
-        isABar _ >>=
-        tee(formattedLog("upper it")) >>=
-        upper _
-
-      chain("FooBar") mustBe Success("FOOBAR")
-      console must contain("isAFoo ? : FooBar")
-      console must contain("isABar ? : FooBar")
-      console must contain("upper it : FooBar")
     }
   }
 
