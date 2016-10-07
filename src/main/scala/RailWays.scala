@@ -87,6 +87,10 @@ object RailWays {
     implicit def b2C[A, B, C](g: B => C): Magnet[A, B, C] = new Magnet[A, B, C] {
       override def apply(f: A => Result[B]) = f andThen Result.bind(Result.switch(g))
     }
+
+    implicit def b2u[A, B](g: B => Unit): Magnet[A, B, B] = new Magnet[A, B, B] {
+      override def apply(f: A => Result[B]): A => Result[B] = f andThen Result.bind(Result.tee(g))
+    }
   }
 
 }
