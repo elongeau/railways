@@ -235,7 +235,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   }
 
   "A result" should {
-    "be created implicity" when {
+    "be created implicitly" when {
       "using success method" in {
         case class Person(name: String)
 
