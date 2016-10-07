@@ -60,7 +60,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
 
   ">>=" should {
 
-    def isFooBar = isAFoo _ >>= isABar
+    def isFooBar = isAFoo _ >>= isABar _
     "chain one track functions" in {
       isFooBar("FooBar") mustBe Success("FooBar")
     }
@@ -134,23 +134,23 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     }
 
     "wrap a function that return nothing" in {
-      val wrapped = tee(log _) >>= isAFoo
+      val wrapped = tee(log _) >>= isAFoo _
       wrapped("Foo") mustBe Success("Foo")
       console must contain("Foo")
     }
 
     "wrap a function that fail" in {
       def fail(s: String) = throw new Exception(s"fail with $s")
-      val wrapped = tee(fail _) >>= isAFoo
+      val wrapped = tee(fail _) >>= isAFoo _
       wrapped("Foo") mustBe Failure("fail with Foo")
     }
 
     "be chained with some other function" in {
 
       val chain = tee(formattedLog("isAFoo ?")) >>=
-        isAFoo >>=
+        isAFoo _ >>=
         tee(formattedLog("isABar ?")) >>=
-        isABar >>=
+        isABar _ >>=
         tee(formattedLog("upper it")) >=>
           upper
 
