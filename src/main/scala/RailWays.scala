@@ -30,14 +30,14 @@ object RailWays {
       def apply(cause: String): Failure = new Failure(List(cause))
     }
 
-    def bind[A, B](f: A => Result[B]): Result[A] => Result[B] = {
+    private[RailWays] def bind[A, B](f: A => Result[B]): Result[A] => Result[B] = {
       case Success(a) => f(a)
       case Failure(s) => Failure(s)
     }
 
-    def switch[A, B](f: A => B) = (a: A) => Success(f(a))
+    private[RailWays] def switch[A, B](f: A => B) = (a: A) => Success(f(a))
 
-    def tee[A](f: A => Unit): A => Result[A] = (a: A) => {
+    private[RailWays] def tee[A](f: A => Unit): A => Result[A] = (a: A) => {
       Try(f(a)) match {
         case scala.util.Success(_) => Success(a)
         case scala.util.Failure(e) => Failure(e.getMessage)
