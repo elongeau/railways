@@ -1,5 +1,6 @@
 # Build
 [![Travis CI](https://api.travis-ci.org/elongeau/railways.svg?branch=master)](https://travis-ci.org/elongeau/railways)
+[![codecov.io](https://codecov.io/github/elongeau/railways/coverage.svg?branch=master)](https://codecov.io/github/elongeau/railways?branch=master)
 
 # Railways
 
