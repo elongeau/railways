@@ -80,4 +80,14 @@ object RailWays {
     def apply(f: A => Result[B]): A => Result[C]
   }
 
+  object Magnet {
+    implicit def b2R[A, B, C](g: B => Result[C]): Magnet[A, B, C] = new Magnet[A, B, C] {
+      override def apply(f: A => Result[B]) = f andThen Result.bind(g)
+    }
+
+    implicit def r2R[A, B, C](g: Result[B] => Result[C]): Magnet[A, B, C] = new Magnet[A, B, C] {
+      override def apply(f: A => Result[B]) = f andThen g
+    }
+  }
+
 }
