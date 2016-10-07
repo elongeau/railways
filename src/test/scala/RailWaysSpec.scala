@@ -42,7 +42,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   }
 
   ">>" should {
-    def isFooBar = isAFoo _ >> bind(isABar)
+    def isFooBar = isAFoo _ >>= bind(isABar)
 
     "chain two track function" in {
       isFooBar("FooBar") mustBe Success("FooBar")
