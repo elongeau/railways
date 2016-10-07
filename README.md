@@ -1,3 +1,6 @@
+# Build
+[![Travis CI](https://api.travis-ci.org/elongeau/railways.svg?branch=master)](https://travis-ci.org/elongeau/railways)
+
 # Railways
 
 An implementation in scala of [Railway oriented programming](https://fsharpforfunandprofit.com/posts/recipe-part2/)
