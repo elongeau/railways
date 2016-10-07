@@ -10,7 +10,7 @@ object RailWays {
   sealed trait Result[+A] {
     final def map[B](f: A => B): Result[B] = flatMap(Result.switch(f))
 
-    def flatMap[B](f: A => Result[B]): Result[B]     = this match {
+    def flatMap[B](f: A => Result[B]): Result[B] = this match {
       case Success(a) => f(a)
       case fail: Failure => fail
     }
@@ -45,7 +45,7 @@ object RailWays {
     }
 
     implicit class Ops[A, B](f: A => Result[B]) {
-      def >>=[C](g: Magnet[A,B,C]) = g(f)
+      def >>=[C](g: Magnet[A, B, C]) = g(f)
 
       def &&&(g: (A) => Result[B]): A => Result[B] = (a: A) => {
         (f(a), g(a)) match {
@@ -84,6 +84,7 @@ object RailWays {
     implicit def r2R[A, B, C](g: Result[B] => Result[C]): Magnet[A, B, C] = new Magnet[A, B, C] {
       override def apply(f: A => Result[B]) = f andThen g
     }
+
     implicit def b2C[A, B, C](g: B => C): Magnet[A, B, C] = new Magnet[A, B, C] {
       override def apply(f: A => Result[B]) = f andThen Result.bind(Result.switch(g))
     }

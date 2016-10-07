@@ -163,7 +163,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
         tee(formattedLog("isABar ?")) >>=
         isABar _ >>=
         tee(formattedLog("upper it")) >>=
-          upper _
+        upper _
 
       chain("FooBar") mustBe Success("FOOBAR")
       console must contain("isAFoo ? : FooBar")
