@@ -47,8 +47,6 @@ object RailWays {
     implicit class Ops[A, B](f: A => Result[B]) {
       def >>=[C](g: Magnet[A,B,C]) = g(f)
 
-      def >=>>(g: B => Unit): A => Result[B] = f andThen bind(tee(g))
-
       def &&&(g: (A) => Result[B]): A => Result[B] = (a: A) => {
         (f(a), g(a)) match {
           case (Success(b1), Success(_)) => Success(b1)
