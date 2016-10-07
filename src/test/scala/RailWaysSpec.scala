@@ -75,7 +75,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   }
 
   ">=>" should {
-    def upperFoo = isAFoo _ >=> upper
+    def upperFoo = isAFoo _ >>= upper
 
     "chain a one track function to a two track one" in {
       upperFoo("FooBar") mustBe Success("FOOBAR")
@@ -151,7 +151,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
         isAFoo _ >>=
         tee(formattedLog("isABar ?")) >>=
         isABar _ >>=
-        tee(formattedLog("upper it")) >=>
+        tee(formattedLog("upper it")) >>=
           upper
 
       chain("FooBar") mustBe Success("FOOBAR")
@@ -162,7 +162,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
   }
 
   ">=>>" should {
-    val chain = isAFoo _ >=>> formattedLog("yes it's a foo") >=> upper
+    val chain = isAFoo _ >=>> formattedLog("yes it's a foo") >>= upper
 
     "chain a dead end function" in {
       chain("Foo") mustBe Success("FOO")
@@ -170,7 +170,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     }
 
     "chain 2 dead end function" in {
-      val chain = isAFoo _ >=>> formattedLog("yes it's a foo") >=>> formattedLog("so much log") >=> upper
+      val chain = isAFoo _ >=>> formattedLog("yes it's a foo") >=>> formattedLog("so much log") >>= upper
       chain("Foo") mustBe Success("FOO")
       console must contain("yes it's a foo : Foo")
       console must contain("so much log : Foo")
