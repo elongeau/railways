@@ -41,9 +41,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     }
   }
 
-  ">>" should {
-    def isFooBar = isAFoo _ >>= bind(isABar)
-
+  ">>=" should {
     "chain two track function" in {
       isFooBar("FooBar") mustBe Success("FooBar")
     }
@@ -55,10 +53,6 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     "chain two track function with a failure input on first function" in {
       isFooBar("ZooBar") mustBe Failure("not a foo")
     }
-
-  }
-
-  ">>=" should {
 
     def isFooBar = isAFoo _ >>= isABar _
     "chain one track functions" in {
@@ -72,9 +66,7 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
     "chain one track functions with a failure input on first function" in {
       isFooBar("ZooBar") mustBe Failure("not a foo")
     }
-  }
 
-  ">=>" should {
     def upperFoo = isAFoo _ >>= upper _
 
     "chain a one track function to a two track one" in {
@@ -83,6 +75,25 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
 
     "chain a one track function to a two track one with a failure input" in {
       upperFoo("nope") mustBe Failure("not a foo")
+    }
+
+    val chain = isAFoo _ >>= formattedLog("yes it's a foo") _ >>= upper _
+
+    "chain a dead end function" in {
+      chain("Foo") mustBe Success("FOO")
+      console must contain("yes it's a foo : Foo")
+    }
+
+    "chain 2 dead end function" in {
+      val chain = isAFoo _ >>= formattedLog("yes it's a foo") _ >>= formattedLog("so much log") _ >>= upper _
+      chain("Foo") mustBe Success("FOO")
+      console must contain("yes it's a foo : Foo")
+      console must contain("so much log : Foo")
+    }
+
+    "stop on first failure" in {
+      chain("Bar") mustBe Failure("not a foo")
+      console mustBe empty
     }
   }
 
@@ -159,28 +170,6 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       console must contain("isABar ? : FooBar")
       console must contain("upper it : FooBar")
     }
-  }
-
-  ">=>>" should {
-    val chain = isAFoo _ >>= formattedLog("yes it's a foo") _ >>= upper _
-
-    "chain a dead end function" in {
-      chain("Foo") mustBe Success("FOO")
-      console must contain("yes it's a foo : Foo")
-    }
-
-    "chain 2 dead end function" in {
-      val chain = isAFoo _ >>= formattedLog("yes it's a foo") _ >>= formattedLog("so much log") _ >>= upper _
-      chain("Foo") mustBe Success("FOO")
-      console must contain("yes it's a foo : Foo")
-      console must contain("so much log : Foo")
-    }
-
-    "stop on first failure" in {
-      chain("Bar") mustBe Failure("not a foo")
-      console mustBe empty
-    }
-
   }
 
   "a failure" should {
