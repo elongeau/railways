@@ -10,17 +10,15 @@ An implementation in scala of [Railway oriented programming](https://fsharpforfu
 
 the `Result[A]` represent the result of a computation that can be a `Success[A]` or `Failure`
 
-# Result operations
+# Chaining `Result` functions
 
-`Result` offers some functions to chain functions. The base function is a `A => Result[B]`
+The implicit function `>>=` allow to chain different kind of function, start from a function `A => Result[B]`. Functions that can be chained are the following : 
 
-| Function |           Input           |      Result      |                             Description                              |
-|----------|---------------------------|------------------|----------------------------------------------------------------------|
-| `>>`     | `Result[B] => Result [C]` | `A => Result[C]` | chain 2 functions                                                    |
-| `>>=`    | `B => Result [C]`         | `A => Result[C]` |                                                                      |
-| `>=>`    | `B => C`                  | `A => Result[C]` |                                                                      |
-| `>=>>`   | `B => Unit`               | `A => Result[B]` | allow to call a `Unit` function and pass the result of base function |
-| `&&&`    | `A => Result[B]`          | `A => Result[B]` | execute and concat the result of 2 functions                                                                     |
+* `Result[B] => Result [C]`
+* `B => Result [C]`        
+* `B => C`                 
+* `B => Unit`              
+* `A => Result[B]`         
 
 # Create a `Result`
 
