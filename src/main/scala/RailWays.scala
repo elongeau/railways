@@ -9,6 +9,7 @@ object RailWays {
 
   sealed trait Result[+A] {
     final def map[B](f: A => B): Result[B] = flatMap(Result.switch(f))
+    final def >>[B](f: A => B) = map(f)
 
     def flatMap[B](f: A => Result[B]): Result[B] = this match {
       case Success(a) => f(a)
