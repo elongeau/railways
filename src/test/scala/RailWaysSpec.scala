@@ -162,6 +162,13 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       res mustBe Success("FOO")
     }
 
+    "have >> as alias for map" in {
+      val expected = Success("foo") map (_.toUpperCase)
+      val res = Success("foo") >> (_.toUpperCase)
+
+      res mustBe expected
+    }
+
     "flatMap" when {
       "function return a success" in {
         val res = Success("foo") flatMap { s: String => Success(s.toUpperCase) }
