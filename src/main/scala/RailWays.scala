@@ -15,6 +15,8 @@ object RailWays {
       case Success(a) => f(a)
       case fail: Failure => fail
     }
+
+    final def >>=[B](f: A => Result[B]) = flatMap(f)
   }
 
   object Result {
