@@ -100,12 +100,12 @@ class RailWaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyCh
       }
     }
 
-    "always return the first success" when {
+    "always return the input" when {
       "the 2 functions change the input" in {
         def upperRes(s: String) = Success(s.toUpperCase)
         def lowerRes(s: String) = Success(s.toLowerCase)
         val parallel = upperRes _ &&& lowerRes _
-        parallel("foo") mustBe Success("FOO")
+        parallel("foo") mustBe Success("foo")
       }
     }
 
