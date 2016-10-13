@@ -51,9 +51,9 @@ object RailWays {
     implicit class Ops[A, B](f: A => Result[B]) {
       def >=>[C](g: Magnet[A, B, C]) = g(f)
 
-      def &&&(g: (A) => Result[B]): A => Result[B] = (a: A) => {
+      def &&&(g: (A) => Result[A]): A => Result[A] = (a: A) => {
         (f(a), g(a)) match {
-          case (Success(b1), Success(_)) => Success(b1)
+          case (Success(_), Success(_)) => Success(a)
           case (Failure(s), Success(_)) => Failure(s)
           case (Success(_), Failure(s)) => Failure(s)
           case (Failure(f1), Failure(f2)) => Failure(f1 ::: f2)
