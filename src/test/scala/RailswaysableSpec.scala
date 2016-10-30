@@ -1,9 +1,6 @@
-import RailWays.Result
-import RailWays.Result.{Failure, Success}
-import org.scalatest.{MustMatchers, WordSpec}
 import Railswaysable._
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
-import org.scalatest.prop.Tables.Table
+import org.scalatest.{MustMatchers, WordSpec}
 
 /**
   * @author elongeau
