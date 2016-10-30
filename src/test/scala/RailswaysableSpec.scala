@@ -11,7 +11,7 @@ class RailswaysableSpec extends WordSpec with MustMatchers with TableDrivenPrope
   def isABar = (_: String) contains "Bar"
 
   "option" should {
-    "be Railswayssable" in {
+    "be Railwaysable" in {
       def optFoo(s: String) = if (isAFoo(s)) Some(s) else None
       def optBar(s: String) = if (isABar(s)) Some(s) else None
 
