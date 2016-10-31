@@ -7,8 +7,8 @@ trait Railwaysable[F[_]] {
 
 object Railwaysable {
 
-  implicit class OptionIsRailwaysable[A, B, C](f: A => Option[B]) extends Railwaysable[A, B, C, Option] {
-    override def >=>(g: (B) => Option[C]): (A) => Option[C] = f(_) flatMap g
+  implicit class RailwaysSyntax[A, B, F[_]](f: A => F[B])(implicit r: Railwaysable[F]) {
+    def >=>[C](g: B => F[C]): A => F[C] = r.chain(f, g)
   }
 
 }
