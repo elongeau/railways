@@ -1,8 +1,8 @@
 /**
   * @author elongeau
   */
-trait Railwaysable[A, B, C, F[_]] {
-  def >=>(g: B => F[C]): A => F[C]
+trait Railwaysable[F[_]] {
+  def chain[A, B, C](f: A => F[B], g: B => F[C]): A => F[C]
 }
 
 object Railwaysable {
