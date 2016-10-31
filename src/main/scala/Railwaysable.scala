@@ -11,4 +11,8 @@ object Railwaysable {
     def >=>[C](g: B => F[C]): A => F[C] = r.chain(f, g)
   }
 
+  implicit object OptionIsRailwaysable extends Railwaysable[Option] {
+    override def chain[A, B, C](f: (A) => Option[B], g: (B) => Option[C]): (A) => Option[C] = f(_) flatMap g
+  }
+
 }
