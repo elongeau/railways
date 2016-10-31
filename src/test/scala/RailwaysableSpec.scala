@@ -1,11 +1,11 @@
-import Railswaysable._
+import Railwaysable._
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
 import org.scalatest.{MustMatchers, WordSpec}
 
 /**
   * @author elongeau
   */
-class RailswaysableSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks {
+class RailwaysableSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks {
   def isAFoo = (_: String) contains "Foo"
 
   def isABar = (_: String) contains "Bar"
