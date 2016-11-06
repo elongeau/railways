@@ -1,11 +1,11 @@
-import Railwaysable._
+import CanRailways._
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
 import org.scalatest.{MustMatchers, WordSpec}
 
 /**
   * @author elongeau
   */
-class RailwaysableSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks {
+class CanRailwaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks {
   def isAFoo = (_: String) contains "Foo"
 
   def isABar = (_: String) contains "Bar"
@@ -51,7 +51,7 @@ class RailwaysableSpec extends WordSpec with MustMatchers with TableDrivenProper
         case c: NyanCat => RainbowPony(c)
       }
 
-      implicit object ponyIsRailwaysable extends Railwaysable[Pony] {
+      implicit object ponyIsRailwaysable extends CanRailways[Pony] {
         override def chain[A, B, C](f: (A) => Pony[B], g: (B) => Pony[C]): (A) => Pony[C] = (a: A) => f(a) match {
           case RainbowPony(bb) => g(bb)
           case AwesomePony(bb) => g(bb)
