@@ -7,7 +7,7 @@ trait CanRailways[F[_]] {
 
 class CanRailwaysOps {
 
-  implicit class RailwaysSyntax[A, B, F[_]](f: A => F[B])(implicit r: CanRailways[F]) {
+  implicit class CanRailwaysSyntax[A, B, F[_]](f: A => F[B])(implicit r: CanRailways[F]) {
     def >=>[C](g: B => F[C]): A => F[C] = r.chain(f, g)
   }
 
