@@ -1,17 +1,17 @@
-import Railwaysable._
+import CanRailways._
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
 import org.scalatest.{MustMatchers, WordSpec}
 
 /**
   * @author elongeau
   */
-class RailwaysableSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks {
+class CanRailwaysSpec extends WordSpec with MustMatchers with TableDrivenPropertyChecks {
   def isAFoo = (_: String) contains "Foo"
 
   def isABar = (_: String) contains "Bar"
 
   "option" should {
-    "be Railwaysable" in {
+    "railways" in {
       def optFoo(s: String) = if (isAFoo(s)) Some(s) else None
       def optBar(s: String) = if (isABar(s)) Some(s) else None
 
@@ -33,7 +33,7 @@ class RailwaysableSpec extends WordSpec with MustMatchers with TableDrivenProper
   }
 
   "A custom ADT" should {
-    "be Railwaysable" in {
+    "railways" in {
       sealed trait Pony[+A]
       case class RainbowPony[A](a: A) extends Pony[A]
       case class AwesomePony[A](a: A) extends Pony[A]
@@ -51,7 +51,7 @@ class RailwaysableSpec extends WordSpec with MustMatchers with TableDrivenProper
         case c: NyanCat => RainbowPony(c)
       }
 
-      implicit object ponyIsRailwaysable extends Railwaysable[Pony] {
+      implicit object ponyCanRailways extends CanRailways[Pony] {
         override def chain[A, B, C](f: (A) => Pony[B], g: (B) => Pony[C]): (A) => Pony[C] = (a: A) => f(a) match {
           case RainbowPony(bb) => g(bb)
           case AwesomePony(bb) => g(bb)
