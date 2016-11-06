@@ -51,7 +51,7 @@ class CanRailwaysSpec extends WordSpec with MustMatchers with TableDrivenPropert
         case c: NyanCat => RainbowPony(c)
       }
 
-      implicit object ponyIsRailwaysable extends CanRailways[Pony] {
+      implicit object ponyCanRailways extends CanRailways[Pony] {
         override def chain[A, B, C](f: (A) => Pony[B], g: (B) => Pony[C]): (A) => Pony[C] = (a: A) => f(a) match {
           case RainbowPony(bb) => g(bb)
           case AwesomePony(bb) => g(bb)

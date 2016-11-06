@@ -15,7 +15,7 @@ class CanRailwaysOps {
 
 object CanRailways extends CanRailwaysOps {
 
-  implicit object OptionIsRailwaysable extends CanRailways[Option] {
+  implicit object OptionCanRailways extends CanRailways[Option] {
     override def chain[A, B, C](f: (A) => Option[B], g: (B) => Option[C]): (A) => Option[C] = f(_) flatMap g
   }
 
