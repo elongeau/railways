@@ -1,5 +1,8 @@
-import RailWays.Result
-import RailWays.Result._
+package fr.railways
+
+import fr.railways.RailWays.Result
+import fr.railways.RailWays.Result._
+import fr.railways.RailWays.Result.{Failure, Success}
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
 import org.scalatest.{BeforeAndAfter, MustMatchers, WordSpec}
 

@@ -1,4 +1,6 @@
-import RailWays.Result.{Failure, Success}
+package fr.railways
+
+import fr.railways.RailWays.Result.{Failure, Success}
 
 import scala.util.Try
 
