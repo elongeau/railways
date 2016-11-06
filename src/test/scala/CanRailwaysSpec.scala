@@ -11,7 +11,7 @@ class CanRailwaysSpec extends WordSpec with MustMatchers with TableDrivenPropert
   def isABar = (_: String) contains "Bar"
 
   "option" should {
-    "be Railwaysable" in {
+    "railways" in {
       def optFoo(s: String) = if (isAFoo(s)) Some(s) else None
       def optBar(s: String) = if (isABar(s)) Some(s) else None
 
@@ -33,7 +33,7 @@ class CanRailwaysSpec extends WordSpec with MustMatchers with TableDrivenPropert
   }
 
   "A custom ADT" should {
-    "be Railwaysable" in {
+    "railways" in {
       sealed trait Pony[+A]
       case class RainbowPony[A](a: A) extends Pony[A]
       case class AwesomePony[A](a: A) extends Pony[A]
