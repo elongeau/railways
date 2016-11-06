@@ -1,3 +1,5 @@
+package fr.railways
+
 /**
   * @author elongeau
   */

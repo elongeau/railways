@@ -12,20 +12,20 @@ the `Result[A]` represent the result of a computation that can be a `Success[A]`
 
 # Chaining `Result` functions
 
-The implicit function `>>=` allow to chain different kind of function, start from a function `A => Result[B]`. Functions that can be chained are the following : 
+The implicit function `>>=` allow to chain different kind of function, start from a function `A => Result[B]`. Functions that can be chained are the following :
 
 * `Result[B] => Result [C]`
-* `B => Result [C]`        
-* `B => C`                 
-* `B => Unit`              
-* `A => Result[B]`         
+* `B => Result [C]`
+* `B => C`
+* `B => Unit`
+* `A => Result[B]`
 
 # Create a `Result`
 
 ## Use constructor
 
 ```scala
-import RailWays.Result.{Failure, Success}
+import fr.railways.RailWays
 
 val success = Success("Foo")
 val failure = Failure("failed !")
@@ -34,18 +34,18 @@ val failure = Failure("failed !")
 ## Use implicit converter
 
 ```scala
-import RailWays.Result.{Failure, Success}
+import fr.railways.RailWays
 
 val success = "foo".success
 val failure = "failed !".fail
 ```
 
-# Failure 
+# Failure
 
-A `Failure` can contains many causes but can only be created with one cause. But you can append another cause easily : 
+A `Failure` can contains many causes but can only be created with one cause. But you can append another cause easily :
 
 ```scala
-import RailWays.Result._
+import fr.railways.RailWays
 
 val fail = "failed !".fail ++ "again" // fail: RailWays.Result.Failure = Failure(failed !,again)
 ```
