@@ -1,4 +1,6 @@
-import CanRailways._
+package fr.railways
+
+import fr.railways.CanRailways._
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
 import org.scalatest.{MustMatchers, WordSpec}
 
